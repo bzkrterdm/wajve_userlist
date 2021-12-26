@@ -4,7 +4,6 @@ import 'package:user_list/ui/user_avatar.dart';
 import 'package:user_list/ui/user_information.dart';
 
 class UserDetailPage extends StatefulWidget {
-  static const valueKey = ValueKey('UserDetailPage');
   final User user;
 
   const UserDetailPage({Key? key, required this.user}) : super(key: key);

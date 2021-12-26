@@ -6,9 +6,7 @@ import 'package:user_list/ui/user_group_view_model.dart';
 import 'user_group.dart';
 
 class UserListPage extends StatefulWidget {
-  final ValueChanged onUserSelected;
-
-  const UserListPage({Key? key, required this.onUserSelected}) : super(key: key);
+  const UserListPage({Key? key}) : super(key: key);
 
   @override
   _UserListPageState createState() => _UserListPageState();
@@ -39,7 +37,7 @@ class _UserListPageState extends State<UserListPage> {
       body: PagedListView<int, UserGroupViewModel>(
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<UserGroupViewModel>(
-          itemBuilder: (context, item, index) => UserGroup(userGroup: item, onUserSelected: widget.onUserSelected),
+          itemBuilder: (context, item, index) => UserGroup(userGroup: item),
         ),
       ),
     );

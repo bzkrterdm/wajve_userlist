@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:user_list/core/user_provider.dart';
 import 'package:user_list/ui/user_group_view_model.dart';
 import 'package:user_list/ui/user_row.dart';
 import 'package:user_list/util/view_util.dart';
 
 class UserGroup extends StatelessWidget {
   final UserGroupViewModel userGroup;
-  final ValueChanged onUserSelected;
 
-  const UserGroup({Key? key, required this.userGroup, required this.onUserSelected}) : super(key: key);
+  const UserGroup({Key? key, required this.userGroup}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +42,11 @@ class UserGroup extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     var user = userList[index];
+                    var userProvider = Provider.of<UserProvider>(context, listen: false);
                     return GestureDetector(
                       child: UserRow(user: user),
                       onTap: () {
-                        return onUserSelected(user);
+                        userProvider.selectUser(user);
                       },
                     );
                   },

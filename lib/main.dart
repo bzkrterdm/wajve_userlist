@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:user_list/core/model/user.dart';
+import 'package:provider/provider.dart';
+import 'package:user_list/core/user_provider.dart';
 import 'package:user_list/ui/user_detail_page.dart';
 import 'package:user_list/ui/user_list_page.dart';
 
 void main() {
-  runApp(const UserListApp());
+  runApp(UserListApp());
 }
 
-class UserListApp extends StatefulWidget {
-  const UserListApp({Key? key}) : super(key: key);
+class UserListApp extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  @override
-  _UserListAppState createState() => _UserListAppState();
-}
-
-class _UserListAppState extends State<UserListApp> {
-  User? _selectedUser;
+  UserListApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +21,21 @@ class _UserListAppState extends State<UserListApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Navigator(
-        pages: [
-          MaterialPage(
-            child: UserListPage(onUserSelected: (user) {
-              setState(() {
-                _selectedUser = user;
-              });
-            }),
-          ),
-          if (_selectedUser != null) MaterialPage(child: UserDetailPage(user: _selectedUser!, key: UserDetailPage.valueKey))
-        ],
-        onPopPage: (route, result) {
-          final page = route.settings as MaterialPage;
-          if (page.child.key == UserDetailPage.valueKey) {
-            _selectedUser = null;
-          }
-          return route.didPop(result);
+      home: ChangeNotifierProvider(
+        create: (_) => UserProvider(),
+        builder: (context, _) {
+          var userProvider = Provider.of<UserProvider>(context, listen: true);
+          return Navigator(
+            key: navigatorKey,
+            pages: [
+              const MaterialPage(child: UserListPage()),
+              if (userProvider.selectedUser != null) MaterialPage(child: UserDetailPage(user: userProvider.selectedUser!))
+            ],
+            onPopPage: (route, result) {
+              userProvider.deselectUser();
+              return route.didPop(result);
+            },
+          );
         },
       ),
     );
