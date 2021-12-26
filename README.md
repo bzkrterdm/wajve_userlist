@@ -1,8 +1,6 @@
-# user_list
+# wajve | Coding Challenge.
 
-User list project for Wajve Coding Challenge.
-
-## Getting Started
+### Build Instructions:
 
 - Be sure your Flutter version up to dated
 - Run "flutter pub get" on your terminal

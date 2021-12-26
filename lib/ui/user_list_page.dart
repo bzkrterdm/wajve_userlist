@@ -53,14 +53,11 @@ class _UserListPageState extends State<UserListPage> {
             'User List',
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: PagedListView<int, UserGroupViewModel>(
-            pagingController: _pagingController,
-            builderDelegate: PagedChildBuilderDelegate<UserGroupViewModel>(
-              itemBuilder: (context, item, index) => UserGroup(
-                userGroup: item,
-              ),
+        body: PagedListView<int, UserGroupViewModel>(
+          pagingController: _pagingController,
+          builderDelegate: PagedChildBuilderDelegate<UserGroupViewModel>(
+            itemBuilder: (context, item, index) => UserGroup(
+              userGroup: item,
             ),
           ),
         ),
