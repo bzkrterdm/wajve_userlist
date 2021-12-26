@@ -5,8 +5,9 @@ import 'package:user_list/util/view_util.dart';
 
 class UserGroup extends StatelessWidget {
   final UserGroupViewModel userGroup;
+  final ValueChanged onUserSelected;
 
-  const UserGroup({Key? key, required this.userGroup}) : super(key: key);
+  const UserGroup({Key? key, required this.userGroup, required this.onUserSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,13 @@ class UserGroup extends StatelessWidget {
                   itemCount: userList.length,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return UserRow(user: userList[index]);
+                    var user = userList[index];
+                    return GestureDetector(
+                      child: UserRow(user: user),
+                      onTap: () {
+                        return onUserSelected(user);
+                      },
+                    );
                   },
                 ),
               ),

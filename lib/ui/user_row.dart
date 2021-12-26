@@ -14,8 +14,8 @@ class UserRow extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
         children: [
-          UserAvatar(name: user.name, gender: user.gender),
-          UserInformation(name: user.name, email: user.email)
+          UserAvatar(name: user.name, gender: user.gender, size: 42,),
+          UserInformation(name: user.name, email: user.email, alignment: CrossAxisAlignment.start,)
         ],
       ),
     );
