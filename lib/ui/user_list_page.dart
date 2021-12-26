@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:user_list/core/model/user.dart';
 import 'package:user_list/core/service/users_service.dart';
-import 'package:user_list/ui/user_row.dart';
+import 'package:user_list/ui/user_group_view_model.dart';
+
+import 'user_group.dart';
 
 class UserListPage extends StatefulWidget {
   const UserListPage({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class UserListPage extends StatefulWidget {
 class _UserListPageState extends State<UserListPage> {
   int? _pageSize;
 
-  final PagingController<int, User> _pagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, UserGroupViewModel> _pagingController = PagingController(firstPageKey: 1);
 
   @override
   void initState() {
@@ -27,14 +29,14 @@ class _UserListPageState extends State<UserListPage> {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final userResponse = await UsersService.getUsers(pageKey);
-      _pageSize ??= userResponse.meta.pagination.pages;
+      _pageSize = userResponse.meta.pagination.pages;
       final isLastPage = userResponse.meta.pagination.page == _pageSize!;
-      var userList = userResponse.userList;
+      var userGroup = _groupUserByStatus(userResponse.userList);
       if (isLastPage) {
-        _pagingController.appendLastPage(userList);
+        _pagingController.appendLastPage(userGroup);
       } else {
         final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(userList, nextPageKey);
+        _pagingController.appendPage(userGroup, nextPageKey);
       }
     } catch (error) {
       _pagingController.error = error;
@@ -43,11 +45,22 @@ class _UserListPageState extends State<UserListPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: PagedListView<int, User>(
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<User>(
-            itemBuilder: (context, item, index) => UserRow(
-              user: item,
+        appBar: AppBar(
+          centerTitle: false,
+          titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 22),
+          backgroundColor: Colors.white,
+          title: const Text(
+            'User List',
+          ),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: PagedListView<int, UserGroupViewModel>(
+            pagingController: _pagingController,
+            builderDelegate: PagedChildBuilderDelegate<UserGroupViewModel>(
+              itemBuilder: (context, item, index) => UserGroup(
+                userGroup: item,
+              ),
             ),
           ),
         ),
@@ -57,5 +70,15 @@ class _UserListPageState extends State<UserListPage> {
   void dispose() {
     _pagingController.dispose();
     super.dispose();
+  }
+
+  List<UserGroupViewModel> _groupUserByStatus(List<User> userList) {
+    List<User> activeUsers = [];
+    List<User> passiveUsers = [];
+    for (var user in userList) {
+      user.status == User.activeUserValue ? activeUsers.add(user) : passiveUsers.add(user);
+    }
+    List<UserGroupViewModel> userGroups = [UserGroupViewModel(activeUsers, true), UserGroupViewModel(passiveUsers, false)];
+    return userGroups;
   }
 }

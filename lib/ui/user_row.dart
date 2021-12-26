@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:user_list/core/model/user.dart';
+import 'package:user_list/util/view_util.dart';
 
 class UserRow extends StatelessWidget {
   final User user;
@@ -8,6 +9,39 @@ class UserRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(user.name);
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: ViewUtil.getColorForName(user.name),
+            child: Text(_getCapitalLetters(user.name)),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(user.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  Text(user.email, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  String _getCapitalLetters(String name) {
+    String letters = '';
+    for (var word in name.split(" ")) {
+      if (word.contains(".")) {
+        continue;
+      }
+      letters += word[0];
+    }
+    return letters;
   }
 }
