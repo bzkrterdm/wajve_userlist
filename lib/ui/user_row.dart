@@ -15,7 +15,10 @@ class UserRow extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: ViewUtil.getColorForName(user.name),
-            child: Text(_getCapitalLetters(user.name)),
+            child: Text(
+              _getCapitalLetters(user.name),
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
           Expanded(
             child: Padding(
@@ -23,7 +26,7 @@ class UserRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(user.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  Text(user.name, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   Text(user.email, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Colors.grey, fontSize: 14)),
                 ],
               ),
@@ -42,6 +45,6 @@ class UserRow extends StatelessWidget {
       }
       letters += word[0];
     }
-    return letters;
+    return letters.length > 2 ? letters.substring(0, 2) : letters;
   }
 }

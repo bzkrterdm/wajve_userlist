@@ -6,16 +6,8 @@ class ViewUtil {
   }
 
   static Color getColorForName(String name) {
-    var color = '#';
-    var hash = 0;
-    for (var i = 0; i < name.length; i++) {
-      hash = name.codeUnits[i] + ((hash << 5) - hash);
-    }
-    for (var i = 0; i < 3; i++) {
-      var value = (hash >> (i * 8)) & 0xFF;
-      color += ('00' + value.toRadixString(16)).substring(2);
-    }
-    return HexColor(color);
+    String color =  "#FF" + name.hashCode.abs().toString();
+    return HexColor(color.substring(0, 9).replaceAll('F', '9'));
   }
 }
 
