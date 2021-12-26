@@ -1,4 +1,6 @@
 class User {
+  static const String activeUserValue = "active";
+
   User({
     required this.id,
     required this.name,
