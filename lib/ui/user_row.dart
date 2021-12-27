@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:user_list/core/model/user.dart';
+import 'package:user_list/ui/user_avatar.dart';
+import 'package:user_list/ui/user_information.dart';
 
 class UserRow extends StatelessWidget {
   final User user;
@@ -8,6 +10,14 @@ class UserRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(user.name);
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        children: [
+          UserAvatar(name: user.name, gender: user.gender, size: 42,),
+          UserInformation(name: user.name, email: user.email, alignment: CrossAxisAlignment.start,)
+        ],
+      ),
+    );
   }
 }

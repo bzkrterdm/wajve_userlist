@@ -1,4 +1,7 @@
 class User {
+  static const String activeUserValue = "active";
+  static const String genderMale = "male";
+
   User({
     required this.id,
     required this.name,
